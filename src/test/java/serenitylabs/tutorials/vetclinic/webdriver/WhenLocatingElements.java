@@ -22,6 +22,7 @@ public class WhenLocatingElements {
 
     @Before
     public void setup() {
+        System.setProperty("webdriver.chrome.driver","C:\\Automation\\driver\\e\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         URL testSiteUrl = getClass().getResource("/site/elements.html");
@@ -31,7 +32,7 @@ public class WhenLocatingElements {
     @Test
     public void find_an_element_by_id() {
         // TODO: Find the first name field by id
-        WebElement firstName = null;
+        WebElement firstName = driver.findElement(By.id("first-name"));
 
         assertThat(firstName.getAttribute("placeholder"), equalTo("Enter the first name here"));
     }
@@ -39,7 +40,7 @@ public class WhenLocatingElements {
     @Test
     public void find_an_element_by_name() {
         // TODO: Find the last name field by name
-        WebElement lastName = null;
+        WebElement lastName = driver.findElement(By.name("last-name"));
 
         assertThat(lastName.getAttribute("placeholder"), equalTo("Enter the last name here"));
     }
@@ -48,7 +49,7 @@ public class WhenLocatingElements {
     @Test
     public void finding_an_element_by_tag() {
         // TODO: Find the blockquote field by its HTML tag
-        WebElement quote = null;
+        WebElement quote = driver.findElement(By.tagName("blockquote"));
 
         assertThat(quote.getText(), containsString("locating and manipulating elements"));
     }
@@ -56,7 +57,7 @@ public class WhenLocatingElements {
     @Test
     public void finding_an_element_by_slink_text() {
         // TODO: Find the 'Next Section' link by link text
-        WebElement nextSection = null;
+        WebElement nextSection = driver.findElement(By.linkText("Next Section"));
 
         assertThat(nextSection.getText(), equalTo("Next Section"));
     }
@@ -64,17 +65,20 @@ public class WhenLocatingElements {
     @Test
     public void finding_the_new_todo_field_by_css() {
         // TODO: Find the Country of Origin dropdown using a CSS selector
-        WebElement countryDropdown = null;
+        WebElement countryDropdown = driver.findElement(By.cssSelector(".country-of-domicile select"));
 
         new Select(countryDropdown).getOptions();
-        assertThat(new Select(countryDropdown).getOptions(), hasSize(6));
+        assertThat(new Select(countryDropdown).getOptions(), hasSize(5));
     }
 
     @Test
     public void entering_values_into_text_fields() {
         // TODO: Enter Sarah-Jane Smith into the first and last names
-        WebElement firstName = null;
-        WebElement lastName = null;
+        WebElement firstName = driver.findElement(By.id("first-name"));
+        WebElement lastName = driver.findElement(By.name("last-name"));
+
+        firstName.sendKeys("Sarah-Jane");
+        lastName.sendKeys("Smith");
 
         assertThat(firstName.getAttribute("value"), equalTo("Sarah-Jane"));
         assertThat(lastName.getAttribute("value"), equalTo("Smith"));
@@ -83,7 +87,8 @@ public class WhenLocatingElements {
     @Test
     public void setting_a_checkbox() {
         // TODO: Check the VIP checkbox
-        WebElement vip = null;
+        WebElement vip = driver.findElement(By.id("vip"));
+        vip.click();
 
         assertThat(vip.isSelected(), equalTo(true));
     }
@@ -91,7 +96,8 @@ public class WhenLocatingElements {
     @Test
     public void setting_a_radio_button() {
         // TODO: Select the 'Courrier Pigeon' option in the notifications radio buttons
-        WebElement notificationsByCourrierPigeon = null;
+        WebElement notificationsByCourrierPigeon = driver.findElement(By.xpath("//*[@class='col-sm-6']//div//input[@value='Courrier Pigeon']"));
+        notificationsByCourrierPigeon.click();
 
         assertThat(driver.findElement(By.id("notifications-preference")).getText(), equalTo("Pigeon"));
     }
